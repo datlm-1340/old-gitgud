@@ -1,0 +1,31 @@
+{
+  "name": "jk",
+  "version": "1.0.0",
+  "description": "Chrome extension to improve code review experience on GitHub.com",
+  "main": "main.js",
+  "devDependencies": {
+    "async": "^2.0.0-rc.5",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-coverage": "^1.0.0",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-junit-reporter": "^1.0.0",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "karma-requirejs": "^1.0.0",
+    "mkdirp": "^0.5.1",
+    "ncp": "^2.0.0",
+    "requirejs": "^2.2.0",
+    "uglify-js": "^2.7.3",
+    "zip-folder": "^1.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\"",
+    "build": "node build.js"
+  },
+  "author": "Irek Mirgaleev",
+  "repository": "https://github.com/irek02/chrome-github-code-review",
+  "license": "ISC"
+}

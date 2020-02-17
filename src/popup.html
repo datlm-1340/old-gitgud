@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      body {
+        font-size: 100%;
+        width: 500px;
+      }
+      .hotkeys li {
+        margin-bottom: 10px;
+      }
+      .btn {
+        cursor: pointer;
+        padding: 3px 5px;
+        color: #555;
+        vertical-align: middle;
+        background-color: #fcfcfc;
+        border: solid 1px #ccc;
+        border-bottom-color: #bbb;
+        border-radius: 3px;
+        box-shadow: inset 0 -1px 0 #bbb;
+      }
+      .btn:active {
+        background-color: #9F9E9E;
+      }
+    </style>
+    <script src="../lib/jquery-1.12.3.min.js"></script>
+    <script src="popup.js"></script>
+  </head>
+  <body>
+    <h3>GIT GUD</h3>
+    <p></p>
+
+    <ul class="hotkeys">
+      <li>
+        <span class="btn">M</span> open directory bar/ mở thanh thư mục
+      </li>
+      <li>
+        <span class="btn"> , </span> / <span class="btn"> . </span> jump between files / di chuyển giữa các file
+      </li>
+    </ul>
+
+    <span id="update" class="btn" style="float:right;">UPDATE</span>
+
+    <br><br>
+  </body>
+</html>
+
