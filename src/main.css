@@ -71,12 +71,24 @@
   padding: 1px 3px;
 }
 
-.warning-count, .danger-count, .comment-count {
+.icon-unopened {
+  background-color: #fafbfc;
+  border: 1px solid #d4d4d4;
+  border-radius: 3px;
+  padding: 1px 3px;
+}
+
+
+.warning-count, .danger-count, .comment-count, .unopened-count {
   color: #fff;
   font-size: 11px;
   margin-left: 5px;
   margin-right: 2px;
   position: relative;
+}
+
+.unopened-count {
+  color: #24292e;
 }
 
 #jk-notice {

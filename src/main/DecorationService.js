@@ -30,6 +30,11 @@ DecorationService.prototype.appendCommentCounts = function () {
       $(item).append(count);
     }
 
+    var unopenedFile = $('#' + fileId).find('.load-diff-button');
+    if (unopenedFile.length > 0) {
+      var unopenedFile = $('<span class="unopened-count"><b class="icon-unopened">...</b></span>');
+      $(item).append(unopenedFile);
+    }
   });
 };
 
@@ -40,16 +45,29 @@ DecorationService.prototype.appendNoDiffMessage = function () {
   $('#jk-notice').css("background-color", $('body').css('background-color'));
 };
 
-DecorationService.prototype.reviewDiffs = function () {
-  var files = $('#jk-hierarchy').find('.jk-file');
-  $.each(files, function (key, file) {
-    var fileId = $(file).data('file-id');
-    var additions = $('#' + fileId).find('.blob-code.blob-code-addition');
+DecorationService.prototype.reviewDiffs = function (singleFile) {
+  if(singleFile) {
+    setTimeout(function(){
+      var file = $("#jk-hierarchy ").find("[data-file-id=" + singleFile + "]");
+      var additions = $('#' + singleFile).find('.blob-code.blob-code-addition');
 
-    review(file, additions);
-  });
+      $(file).find(".unopened-count").hide();
 
-  $("body").prepend('<span id="reviewed"></span>');
+      review(file, additions, true);
+     }, 1997);
+  } else {
+    var files = $('#jk-hierarchy').find('.jk-file');
+
+    $.each(files, function (key, file) {
+      var fileId = $(file).data('file-id');
+      var additions = $('#' + fileId).find('.blob-code.blob-code-addition');
+
+      review(file, additions);
+    });
+
+    $("body").prepend('<span id="reviewed"></span>');
+  }
+  
 
   function strip(html) {
     var doc = new DOMParser().parseFromString(html, 'text/html');
@@ -109,15 +127,17 @@ DecorationService.prototype.reviewDiffs = function () {
     }
   };
 
-  function appendIndicators(report, addition) {
+  function appendIndicators(report, addition, isSingleFile) {
     // thêm icon và tooltip cho warnings và dangers vào dòng addition
     appendWarningIndicators(report, addition);
     appendDangerIndicators(report, addition);
 
-    $(addition).data('is-viewed', 'true');
+    if(isSingleFile !== true) {
+      $(addition).data('is-viewed', 'true');  
+    };  
   };
 
-  function review(file, additions) {
+  function review(file, additions, isSingleFile) {
     // lấy PR checklist
     chrome.storage.local.get(checklistKey, function(checklist) {
       var warningCounts = 0;

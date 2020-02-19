@@ -16,10 +16,12 @@ function saveRepositoryKey() {
   }, function(tabs) {
       // lấy slug của repo
       var currentTab = tabs[0];
-      var repositoryKey = currentTab.url.split("/")[Settings.repositoryKeySplitIndex].toLowerCase();
+      if(currentTab.url.includes('github.com')) {
+        var repositoryKey = currentTab.url.split("/")[Settings.repositoryKeySplitIndex].toLowerCase();
 
-      // sau đó lưu vào session để dùng
-      sessionStorage.setItem(Settings.repositoryKey, repositoryKey);
+        // sau đó lưu vào session để dùng
+        sessionStorage.setItem(Settings.repositoryKey, repositoryKey);
+      };
   });
 };
 
@@ -62,6 +64,8 @@ function fetchData() {
         var code = 'window.location.reload();';
         chrome.tabs.executeScript(arrayOfTabs[0].id, {code: code});
       });
+    } else if (this.status === 400) {
+      alert("UPDATE THẤT BẠI");
     }
   };
 };
@@ -72,7 +76,7 @@ $(document).ready(function() {
   // update dữ liệu
   $('#update').click(function () {
     fetchData();
-  })
+  });
 
   // tự động fetch dữ liệu khi không có dữ liệu trong DB
   chrome.storage.local.get(Settings.checklistKey, function(result){
