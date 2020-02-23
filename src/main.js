@@ -21,8 +21,6 @@ Main.prototype.init = function () {
 };
 
 Main.prototype.generateApp = function () {
-  // console.count();
-
   this.currentPageUrl = this.getWindowLocationHref();
   this.toolBarHeight = $('.pr-toolbar').height();
 
@@ -97,3 +95,11 @@ Main.prototype.monitorLazyLoading = function () {
   }
 };
 
+$(document).ready(function() {
+  $('body').on('click', '.load-diff-button', function() {
+    var hierarchy = $('<p id="jk-hierarchy"></p>');
+    var decorationService = new DecorationService(hierarchy);
+
+    decorationService.reviewDiffs("diff-7");
+  });
+});
