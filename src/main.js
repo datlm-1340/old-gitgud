@@ -44,6 +44,7 @@ Main.prototype.generateApp = function () {
   var decorationService = new DecorationService(hierarchy);
   decorationService.applyInitStyle();
   decorationService.reviewDiffs();
+  decorationService.appendShowMore();
   decorationService.appendCommentCounts();
   decorationService.appendNoDiffMessage();
 
@@ -99,7 +100,8 @@ $(document).ready(function() {
   $('body').on('click', '.load-diff-button', function() {
     var hierarchy = $('<p id="jk-hierarchy"></p>');
     var decorationService = new DecorationService(hierarchy);
+    var currentId = $(this).closest("div.file").attr("id");
 
-    decorationService.reviewDiffs("diff-7");
+    decorationService.reviewDiffs(currentId);
   });
 });
