@@ -29,10 +29,18 @@ DecorationService.prototype.appendCommentCounts = function () {
       var count = $('<span class="comment-count"><b class="icon-comment">' + comments.length + '</b></span>');
       $(item).append(count);
     }
+  });
+};
+
+DecorationService.prototype.appendShowMore = function () {
+  var files = $('#jk-hierarchy').find('.jk-file');
+
+  $.each(files, function (key, item) {
+    var fileId = $(item).data('file-id');
 
     var unopenedFile = $('#' + fileId).find('.load-diff-button');
     if (unopenedFile.length > 0) {
-      var unopenedFile = $('<span class="unopened-count"><b class="icon-unopened">...</b></span>');
+      var unopenedFile = $('<span class="unopened-count" title="Large diffs"><b class="icon-unopened">...</b></span>');
       $(item).append(unopenedFile);
     }
   });
@@ -47,14 +55,20 @@ DecorationService.prototype.appendNoDiffMessage = function () {
 
 DecorationService.prototype.reviewDiffs = function (singleFile) {
   if(singleFile) {
-    setTimeout(function(){
-      var file = $("#jk-hierarchy ").find("[data-file-id=" + singleFile + "]");
-      var additions = $('#' + singleFile).find('.blob-code.blob-code-addition');
-
-      $(file).find(".unopened-count").hide();
-
-      review(file, additions, true);
-     }, 1997);
+    var additions = $('#' + singleFile).find('.blob-code.blob-code-addition');
+    // tạo 1 interval để chờ đến khi file được load xong thì bắt đầu review file đó
+    var interval = setInterval(function() {
+      if(!additions.length) {
+        additions = $('#' + singleFile).find('.blob-code.blob-code-addition');
+      } else {
+        var file = $("#jk-hierarchy ").find("[data-file-id=" + singleFile + "]");
+        $(file).find(".unopened-count").hide();
+        // review lại file hiện tại
+        review(file, additions, true);
+        // clear interval hiện tại
+        clearInterval(interval);
+      }
+    }, 1000);
   } else {
     var files = $('#jk-hierarchy').find('.jk-file');
 
@@ -67,7 +81,7 @@ DecorationService.prototype.reviewDiffs = function (singleFile) {
 
     $("body").prepend('<span id="reviewed"></span>');
   }
-  
+
 
   function strip(html) {
     var doc = new DOMParser().parseFromString(html, 'text/html');
@@ -133,8 +147,8 @@ DecorationService.prototype.reviewDiffs = function (singleFile) {
     appendDangerIndicators(report, addition);
 
     if(isSingleFile !== true) {
-      $(addition).data('is-viewed', 'true');  
-    };  
+      $(addition).data('is-viewed', 'true');
+    };
   };
 
   function review(file, additions, isSingleFile) {
