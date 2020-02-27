@@ -5,45 +5,69 @@
     <style>
       body {
         font-size: 100%;
-        width: 500px;
+        width: 320px;
+        padding: 2em;
+        background: #ffffff;
       }
-      .hotkeys li {
+      .header {
+        font-size: 150%;
+        margin: 0 0 15px;
+      }
+      .hotkeys div {
         margin-bottom: 10px;
+      }
+      small {
+        color: #aaa;
       }
       .btn {
         cursor: pointer;
-        padding: 3px 5px;
-        color: #555;
-        vertical-align: middle;
+        padding: 5px;
+        height: 1em;
+        width: 1em;
+        text-align: center;
+        display: inline-block;
+        color: inherit;
+        vertical-align: baseline;
         background-color: #fcfcfc;
         border: solid 1px #ccc;
         border-bottom-color: #bbb;
         border-radius: 3px;
         box-shadow: inset 0 -1px 0 #bbb;
       }
-      .btn:active {
-        background-color: #9F9E9E;
+      #update {
+        cursor: pointer;
+        padding: 10px 0px;
+        width: 100%;
+        text-align: center;
+        display: block;
+        color: #fff;
+        vertical-align: baseline;
+        background-color: #2cbe4e;
       }
+
     </style>
     <script src="../lib/jquery-1.12.3.min.js"></script>
     <script src="popup.js"></script>
   </head>
   <body>
-    <h3>GIT GUD</h3>
-    <p></p>
-
-    <ul class="hotkeys">
-      <li>
-        <span class="btn">M</span> open directory bar/ mở thanh thư mục
-      </li>
-      <li>
-        <span class="btn"> , </span> / <span class="btn"> . </span> jump between files / di chuyển giữa các file
-      </li>
-    </ul>
-
-    <span id="update" class="btn" style="float:right;">UPDATE</span>
-
-    <br><br>
+    <div class="header">GITGUD - Make git gud again</div>
+    <hr>
+    <div><small>Hotkeys:</small></div>
+    <br>
+    <div class="hotkeys">
+      <div>
+        <span class="btn">M</span>&nbsp;open directory bar
+      </div>
+      <div>
+        <span class="btn">,</span>&nbsp;previous file
+      </div>
+      <div>
+        <span class="btn">.</span>&nbsp;next file
+      </div>
+    </div>
+    <div><small>Update checklist:</small></div>
+    <br>
+    <span id="update">Update</span>
   </body>
 </html>
 

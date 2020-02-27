@@ -30,6 +30,10 @@ AppInteractionService.prototype.attachJumpOnClickBehavior = function (element) {
 
   $(element).find('.jk-file').click(function () {
     that.scrollTo($('#' + $(this).data('file-id')));
+
+    $('#jk-hierarchy').find('.jk-file.current').removeClass('current');
+    $(this).addClass('current');
+
     that.currentFileId = $(this).data('file-id').split('-')[1];
   });
 
@@ -47,21 +51,6 @@ AppInteractionService.prototype.scrollTo = function (element) {
 };
 
 AppInteractionService.prototype.updateCurentDiffPos = function () {
-
-  var id = null;
-
-  // if (!this.getFiles) return;
-
-  $.each(this.getFiles(), function (key, file) {
-    var rect = file.getBoundingClientRect();
-    if (rect.top < 139) {
-      id = $(file).attr("id");
-    }
-  });
-
-  $('#jk-hierarchy').find('.jk-file.current').removeClass('current');
-  $('#jk-hierarchy').find('.jk-file*[data-file-id="' + id + '"]').addClass('current');
-
 
   if ($('#jk-hierarchy').is(":visible") && $('#jk-hierarchy').find('.jk-file.current').is(":visible")) {
     while (isAbove()) {

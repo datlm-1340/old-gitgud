@@ -27,17 +27,22 @@ Main.prototype.generateApp = function () {
   this.initialNumberOfFiles = $('.file').length;
 
   var files = [];
+  var fileIDs = [];
+
   $.each($('.file'), function (index, item) {
     var file = $(item).find('.file-header[data-path]').data('path');
+
     if (file) {
       files[index] = file;
+      fileIDs[index] = item.id;
     }
+
   });
 
   var hierarchy = $('<p id="jk-hierarchy"></p>');
 
   var hierarchyGenerator = new HierarchyGeneratorService();
-  hierarchyGenerator.generateAndApplyHierarchyHtml(files, hierarchy);
+  hierarchyGenerator.generateAndApplyHierarchyHtml(files, fileIDs, hierarchy);
 
   $("body").prepend(hierarchy);
 

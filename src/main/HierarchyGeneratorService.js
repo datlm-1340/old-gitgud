@@ -2,13 +2,14 @@ function HierarchyGeneratorService() {
   this.cnt = 0;
 }
 
-HierarchyGeneratorService.prototype.generateAndApplyHierarchyHtml = function(files, hierarchy) {
+HierarchyGeneratorService.prototype.generateAndApplyHierarchyHtml = function(files, fileIDs, hierarchy) {
 
   this.files = files;
+  this.fileIDs = fileIDs;
   this.element = hierarchy;
 
   var compressedStructure = this.getCompressedHierarchy();
-  this.generateAndApplyHtml(this.element, compressedStructure);
+  this.generateAndApplyHtml(this.element, compressedStructure, fileIDs);
 
 };
 
@@ -21,7 +22,6 @@ HierarchyGeneratorService.prototype.getCompressedHierarchy = function() {
 
 HierarchyGeneratorService.prototype.getHierarchyStructure = function(files) {
   var result = {};
-
   for (key in files) {
     var parts = files[key].split('/');
     this.addProp(result, parts);
@@ -94,8 +94,7 @@ HierarchyGeneratorService.prototype.compressHierarchy = function(hierarchy) {
   }
 };
 
-HierarchyGeneratorService.prototype.generateAndApplyHtml = function(hierarchy, structure) {
-
+HierarchyGeneratorService.prototype.generateAndApplyHtml = function(hierarchy, structure, fileIDs) {
   var list = $(document.createElement('ul'));
 
   var that = this;
@@ -112,7 +111,7 @@ HierarchyGeneratorService.prototype.generateAndApplyHtml = function(hierarchy, s
     else if (typeof structure[index] === 'string') {
       item = $('<li><span class="file-name">' + label + '</span></li>');
       item.addClass('jk-file');
-      item.attr("data-file-id", "diff-" + that.cnt);
+      item.attr("data-file-id", fileIDs[that.cnt]);
       that.cnt = that.cnt + 1;
     }
 
@@ -120,7 +119,7 @@ HierarchyGeneratorService.prototype.generateAndApplyHtml = function(hierarchy, s
     hierarchy.append(list);
 
     if (typeof structure[index] === 'object') {
-      that.generateAndApplyHtml(list, structure[index]);
+      that.generateAndApplyHtml(list, structure[index], fileIDs);
     }
 
   });
