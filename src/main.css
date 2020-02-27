@@ -16,6 +16,9 @@
   background-color: lightblue;
 }
 
+#jk-hierarchy li.folder {
+  font-weight: bold;
+}
 
 #jk-hierarchy ul {
   padding-left: 10px;
@@ -39,8 +42,6 @@
 #jk-hierarchy ul li.folder.collapsed {
   background-image: url('chrome-extension://__MSG_@@extension_id__/images/alpha__folder.svg');
 }
-
-
 
 #jk-hierarchy ul li.gitgud-danger {
   color: #cb2431 !important;
@@ -77,7 +78,6 @@
   border-radius: 3px;
   padding: 1px 3px;
 }
-
 
 .warning-count, .danger-count, .comment-count, .unopened-count {
   color: #fff;
@@ -118,7 +118,10 @@
 }
 
 .gitgud-tooltip-content p{
-  width: 400px;
+  min-width: 100px;
+  width: max-content;
+  max-width: 400px;
+  margin-bottom: 0px;
 }
 
 .gitgud-tooltip:hover .gitgud-tooltip-content {
