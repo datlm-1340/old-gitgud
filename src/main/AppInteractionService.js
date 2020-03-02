@@ -125,6 +125,12 @@ AppInteractionService.prototype.respondToHotKey = function (keyCode) {
 
   }
 
+  if (this.hotKeysService.isValidKeyCodeForCloseSidebar(keyCode)) {
+    if (this.isSidebarHaveContents() && $('#jk-hierarchy').is(':visible')) {
+      $('#jk-hierarchy').hide();
+    }
+  }
+
 };
 
 AppInteractionService.prototype.isSidebarHaveContents = function () {
