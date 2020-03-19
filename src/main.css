@@ -51,6 +51,30 @@
   color: #ff9c4e;
 }
 
+#develop-notice {
+  background: #cb2431;
+  color: #FFFFFF;
+  display: block;
+  font-size: 40px;
+  height: 60px;
+  left: 0px;
+  line-height: 40px;
+  padding: 10px;
+  position: fixed;
+  text-align: center;
+  top: 0px;
+  vertical-align: middle;
+  width: 100%;
+  z-index: 100;
+}
+
+.close-notice {
+  display: inline-block;
+  float: right;
+  font-size: 25px;
+  cursor: pointer;
+}
+
 .icon-danger {
   background-color: #cb2431;
   border: 1px solid #b31f2a;
