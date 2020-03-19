@@ -52,6 +52,7 @@ Main.prototype.generateApp = function () {
   decorationService.appendShowMore();
   decorationService.appendCommentCounts();
   decorationService.appendNoDiffMessage();
+  decorationService.appendWrongBaseMessage();
 
   var appInteractionService = new AppInteractionService(this.toolBarHeight, this.hotKeysService, this);
   appInteractionService.attachFolderCollapseBehavior(hierarchy);
@@ -108,5 +109,11 @@ $(document).ready(function() {
     var currentId = $(this).closest("div.file").attr("id");
 
     decorationService.reviewDiffs(currentId);
+  });
+
+  $('body').on('click', '.close-notice', function() {
+    if (confirm('Are you sure you want to hide this notice?')) {
+      $('#develop-notice').hide();
+    }
   });
 });
