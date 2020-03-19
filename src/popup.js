@@ -7,7 +7,6 @@ var Settings = {
   repositoryKeySplitIndex: 4
 };
 
-
 function saveRepositoryKey() {
   // lấy url của tab đang mở
   chrome.tabs.query({
@@ -64,13 +63,26 @@ function fetchData() {
         var code = 'window.location.reload();';
         chrome.tabs.executeScript(arrayOfTabs[0].id, {code: code});
       });
-    } else if (this.status === 400) {
+    } else if (this.readyState === 4 && this.status === 400) {
       alert("UPDATE THẤT BẠI");
     }
   };
 };
 
 $(document).ready(function() {
+  chrome.tabs.query({
+    active: true,
+    lastFocusedWindow: true
+  }, function(tabs) {
+    var currentTab = tabs[0];
+    if(currentTab.url.includes('github.com')) {
+      $("#not-on-github-popup").hide();
+      $("#main-popup").show();
+    } else {
+      $("#not-on-github-popup").show();
+      $("#main-popup").hide();
+    }
+  });
   saveRepositoryKey();
 
   // update dữ liệu

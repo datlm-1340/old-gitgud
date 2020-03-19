@@ -44,6 +44,9 @@
         vertical-align: baseline;
         background-color: #2cbe4e;
       }
+      #not-on-github-popup, #main-popup {
+        display: none;
+      }
 
     </style>
     <script src="../lib/jquery-1.12.3.min.js"></script>
@@ -52,22 +55,27 @@
   <body>
     <div class="header">GITGUD - Make git gud again</div>
     <hr>
-    <div><small>Hotkeys:</small></div>
-    <br>
-    <div class="hotkeys">
-      <div>
-        <span class="btn">M</span>&nbsp;open directory bar
-      </div>
-      <div>
-        <span class="btn">,</span>&nbsp;previous file
-      </div>
-      <div>
-        <span class="btn">.</span>&nbsp;next file
-      </div>
+    <div id="not-on-github-popup">
+      <div>Please open github to use this extension.</div>
     </div>
-    <div><small>Update checklist:</small></div>
-    <br>
-    <span id="update">Update</span>
+    <div id="main-popup">
+      <div><small>Hotkeys:</small></div>
+      <br>
+      <div class="hotkeys">
+        <div>
+          <span class="btn">M</span>&nbsp;open directory bar
+        </div>
+        <div>
+          <span class="btn">,</span>&nbsp;previous file
+        </div>
+        <div>
+          <span class="btn">.</span>&nbsp;next file
+        </div>
+      </div>
+      <div><small>Update checklist:</small></div>
+      <br>
+      <span id="update">Update</span>
+    </div>
   </body>
 </html>
 

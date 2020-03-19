@@ -1,9 +1,15 @@
 var WARNING = 0;
 var DANGER = 1;
+var DISCO_DEVELOP = "framgia:develop";
 var checklistKey = "GITGUD_CHECKLIST";
 
 function DecorationService(element) {
   this.element = element;
+};
+
+function strip(html) {
+  var doc = new DOMParser().parseFromString(html, 'text/html');
+  return doc.body.textContent || "";
 };
 
 // safety first
@@ -51,6 +57,18 @@ DecorationService.prototype.appendNoDiffMessage = function () {
 
   $("body").prepend('<div id="jk-notice">No diffs found</div>');
   $('#jk-notice').css("background-color", $('body').css('background-color'));
+};
+
+DecorationService.prototype.appendWrongBaseMessage = function () {
+  if ($('#develop-notice').length) return;
+
+  var unformattedBase = $('.base-ref').find(".no-underline").html();
+  var base = strip(unformattedBase);
+
+  if (base === DISCO_DEVELOP) {
+    var notice = "THIS PULL REQUEST IS ON DEVELOP BASE, PLEASE CHANGE BASE IF NOT NEEDED"
+    $("body").prepend('<div id="develop-notice">' + notice + '<div class="close-notice">&times;</div></div>');
+  };
 };
 
 DecorationService.prototype.reviewDiffs = function (singleFile) {
