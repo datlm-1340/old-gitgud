@@ -66,7 +66,7 @@ DecorationService.prototype.appendWrongBaseMessage = function () {
   var base = strip(unformattedBase);
 
   if (base === DISCO_DEVELOP) {
-    var notice = "THIS PULL REQUEST IS ON DEVELOP BASE, PLEASE CHANGE BASE IF IT IS NOT NEEDED!"
+    var notice = "THIS PULL REQUEST IS ON DEVELOP BASE, PLEASE CHANGE BASE IF NOT NEEDED"
     $("body").prepend('<div id="develop-notice">' + notice + '<div class="close-notice">&times;</div></div>');
   };
 };
