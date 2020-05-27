@@ -1,6 +1,6 @@
 var WARNING = 0;
 var DANGER = 1;
-var DISCO_DEVELOP = "framgia:develop";
+var DISCO_DEVELOP = "develop";
 var checklistKey = "GITGUD_CHECKLIST";
 
 function DecorationService(element) {
@@ -62,7 +62,7 @@ DecorationService.prototype.appendNoDiffMessage = function () {
 DecorationService.prototype.appendWrongBaseMessage = function () {
   if ($('#develop-notice').length) return;
 
-  var unformattedBase = $('.base-ref').find(".no-underline").html();
+  var unformattedBase = $('.commit-ref').find(".no-underline").html();
   var base = strip(unformattedBase);
 
   if (base === DISCO_DEVELOP) {
@@ -121,6 +121,8 @@ DecorationService.prototype.reviewDiffs = function (singleFile) {
         var content = $('<p>' + '- ' + warning + '</p>');
         $(indicator).find('.gitgud-tooltip-content').append(content);
       });
+
+      $(addition).addClass('has-warnings');
     };
   };
 
@@ -138,7 +140,9 @@ DecorationService.prototype.reviewDiffs = function (singleFile) {
         var content = $('<p>' + '- ' + danger + '</p>');
         $(indicator).find('.gitgud-tooltip-content').append(content);
       });
-    }
+
+      $(addition).addClass('has-dangers');
+    };
   };
 
   function appendWarningCounts(count, file) {
@@ -160,9 +164,9 @@ DecorationService.prototype.reviewDiffs = function (singleFile) {
   };
 
   function appendIndicators(report, addition, isSingleFile) {
-    // thêm icon và tooltip cho warnings và dangers vào dòng addition
-    appendWarningIndicators(report, addition);
-    appendDangerIndicators(report, addition);
+    // thêm icon và tooltip cho warnings và dangers vào dòng addition, nếu review rồi thì không thêm notice nữa.
+    if (!$(addition).hasClass('has-warnings')) appendWarningIndicators(report, addition);
+    if (!$(addition).hasClass('has-dangers')) appendDangerIndicators(report, addition);
 
     if(isSingleFile !== true) {
       $(addition).data('is-viewed', 'true');
