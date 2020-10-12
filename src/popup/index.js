@@ -89,11 +89,4 @@ $(document).ready(function() {
   $('#update').click(function () {
     fetchData();
   });
-
-  // tự động fetch dữ liệu khi không có dữ liệu trong DB
-  chrome.storage.local.get(Settings.checklistKey, function(result){
-    if (!result[Settings.checklistKey].length) {
-      fetchData();
-    }
-  });
 });

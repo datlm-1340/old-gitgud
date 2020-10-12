@@ -4,43 +4,40 @@ var rimraf = require('rimraf');
 var zipFolder = require('zip-folder');
 var UglifyJS = require('uglify-js');
 var fs = require('fs');
-
 var async = require('async');
 
 async.series([
 	function (callback) {
-		rimraf('extension-dist.zip', [], callback);
+		rimraf('build', [], callback);
 	},
 	function (callback) {
-		rimraf('main.min.js', [], callback);
+		mkdirp('build/static/js', callback);
 	},
 	function (callback) {
-		var result = UglifyJS.minify([ "src/main.js", "src/main/*"]);
-		fs.writeFile("src/main.min.js", result.code, callback);
+		mkdirp('build/static/css', callback);
 	},
 	function (callback) {
-		rimraf('dist', [], callback);
+		var result = UglifyJS.minify(["lib/*"]);
+		fs.writeFile("build/static/js/vendor.min.js", result.code, callback);
 	},
 	function (callback) {
-		mkdirp('dist', callback);
+		var result = UglifyJS.minify(["src/main.js", "src/main/*", "src/init.js"]);
+		fs.writeFile("build/static/js/main.min.js", result.code, callback);
 	},
 	function (callback) {
-		ncp('images', 'dist/images', callback);
+		var result = UglifyJS.minify(["src/popup/index.js"]);
+		fs.writeFile("build/static/js/index.min.js", result.code, callback);
 	},
 	function (callback) {
-		ncp('lib', 'dist/lib', callback);
+		ncp('src/main.css', 'build/static/css/main.css', callback);
 	},
 	function (callback) {
-		ncp('manifest.json', 'dist/manifest.json', callback);
+		ncp('src/popup/index.html', 'build/index.html', callback);
 	},
 	function (callback) {
-		ncp('src', 'dist/src', callback);
+		ncp('manifest.json', 'build/manifest.json', callback);
 	},
 	function (callback) {
-		zipFolder('dist', 'extension-dist.zip', callback);
-	},
-	function (callback) {
-		rimraf('dist', [], callback);
+		ncp('images', 'build/images', callback);
 	}
 ]);
-

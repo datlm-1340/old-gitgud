@@ -1,20 +1,10 @@
 {
-  "name": "jk",
+  "name": "gitgud",
   "version": "1.0.0",
-  "description": "Chrome extension to improve code review experience on GitHub.com",
+  "description": "This extension adds hot keys and hierarchical file view to GitHub pull request pages. Also show warnings from a pre-defined checklist",
   "main": "main.js",
   "devDependencies": {
     "async": "^2.0.0-rc.5",
-    "jasmine-core": "^2.4.1",
-    "karma": "^0.13.22",
-    "karma-chrome-launcher": "^1.0.1",
-    "karma-coverage": "^1.0.0",
-    "karma-firefox-launcher": "^1.0.0",
-    "karma-ie-launcher": "^1.0.0",
-    "karma-jasmine": "^1.0.2",
-    "karma-junit-reporter": "^1.0.0",
-    "karma-phantomjs-launcher": "^1.0.0",
-    "karma-requirejs": "^1.0.0",
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
     "requirejs": "^2.2.0",
@@ -22,10 +12,21 @@
     "zip-folder": "^1.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\"",
-    "build": "node build.js"
+    "build": "node build.js",
+    "watch": "npm-watch"
+  },
+  "watch": {
+    "build": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "js,html,css,json"
+    }
   },
   "author": "Irek Mirgaleev",
-  "repository": "https://github.com/irek02/chrome-github-code-review",
-  "license": "ISC"
+  "repository": "https://github.com/datlm-1340/gitgud",
+  "license": "ISC",
+  "dependencies": {
+    "npm-watch": "^0.7.0"
+  }
 }

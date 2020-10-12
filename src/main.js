@@ -1,5 +1,4 @@
-
-function Main() { }
+function Main() {}
 
 Main.prototype.init = function () {
 
