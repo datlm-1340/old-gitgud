@@ -1,8 +1,7 @@
 var mkdirp = require('mkdirp');
 var ncp = require('ncp').ncp;
 var rimraf = require('rimraf');
-var zipFolder = require('zip-folder');
-var UglifyJS = require('uglify-js');
+var uglify = require('uglify-js');
 var fs = require('fs');
 var async = require('async');
 
@@ -17,15 +16,15 @@ async.series([
 		mkdirp('build/static/css', callback);
 	},
 	function (callback) {
-		var result = UglifyJS.minify(["lib/*"]);
+		var result = uglify.minify(["lib/*"]);
 		fs.writeFile("build/static/js/vendor.min.js", result.code, callback);
 	},
 	function (callback) {
-		var result = UglifyJS.minify(["src/main.js", "src/main/*", "src/init.js"]);
+		var result = uglify.minify(["src/main.js", "src/main/*", "src/init.js"]);
 		fs.writeFile("build/static/js/main.min.js", result.code, callback);
 	},
 	function (callback) {
-		var result = UglifyJS.minify(["src/popup/index.js"]);
+		var result = uglify.minify(["src/popup/index.js"]);
 		fs.writeFile("build/static/js/index.min.js", result.code, callback);
 	},
 	function (callback) {
