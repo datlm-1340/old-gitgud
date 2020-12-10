@@ -91,11 +91,9 @@ AppInteractionService.prototype.getCurrentEl = function () {
 AppInteractionService.prototype.updateCurrentPos = function (keyCode) {
   if (this.currentFileId == null) {
     this.currentFileId = 0;
-  }
-  else if (this.currentFileId < this.files.length - 1 && keyCode == this.hotKeysService.getKeyCodeForNextDiff()) {
+  } else if (this.currentFileId < this.files.length - 1 && keyCode == this.hotKeysService.getKeyCodeForNextDiff()) {
     this.currentFileId++;
-  }
-  else if (this.currentFileId > 0 && keyCode == this.hotKeysService.getKeyCodeForPrevDiff()) {
+  } else if (this.currentFileId > 0 && keyCode == this.hotKeysService.getKeyCodeForPrevDiff()) {
     this.currentFileId--;
   }
 };
@@ -118,8 +116,7 @@ AppInteractionService.prototype.respondToHotKey = function (keyCode) {
 
     if (this.isSidebarHaveContents()) {
       $('#jk-hierarchy').toggle();
-    }
-    else {
+    } else {
       $("#jk-notice").show().delay(600).fadeOut(600);
     }
 

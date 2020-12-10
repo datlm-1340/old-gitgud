@@ -3,7 +3,7 @@ function Main() {}
 Main.prototype.init = function () {
 
   this.hiddenSidebarUrls = [];
-  this.pageLoadWaitTimeout = 1000; // 1 sec
+  this.pageLoadWaitTimeout = 1000;
   this.initialNumberOfFiles = 0;
 
   this.hotKeysService = new HotKeysService();
@@ -22,7 +22,6 @@ Main.prototype.init = function () {
 Main.prototype.generateApp = function () {
   this.currentPageUrl = this.getWindowLocationHref();
   this.toolBarHeight = $('.pr-toolbar').height();
-
   this.initialNumberOfFiles = $('.file').length;
 
   var files = [];
@@ -35,7 +34,6 @@ Main.prototype.generateApp = function () {
       files[index] = file;
       fileIDs[index] = item.id;
     }
-
   });
 
   var hierarchy = $('<p id="jk-hierarchy"></p>');
@@ -45,27 +43,24 @@ Main.prototype.generateApp = function () {
 
   $("body").prepend(hierarchy);
 
-  var decorationService = new DecorationService(hierarchy);
-  decorationService.applyInitStyle();
-  decorationService.reviewDiffs();
-  decorationService.appendShowMore();
-  decorationService.appendCommentCounts();
-  decorationService.appendNoDiffMessage();
-  decorationService.appendWrongBaseMessage();
+  var reviewService = new ReviewService(hierarchy);
+  reviewService.applyInitStyle();
+  reviewService.reviewDiffs();
+  reviewService.appendShowMore();
+  reviewService.appendCommentCounts();
+  reviewService.appendNoDiffMessage();
+  reviewService.appendWrongBaseMessage();
 
   var appInteractionService = new AppInteractionService(this.toolBarHeight, this.hotKeysService, this);
   appInteractionService.attachFolderCollapseBehavior(hierarchy);
   appInteractionService.attachJumpOnClickBehavior(hierarchy);
-
   appInteractionService.updateCurentDiffPos();
 
   this.appInteractionService = appInteractionService;
-
 };
 
 Main.prototype.doKeyPress = function (e) {
 
-  // Do not react on key press if user is typing text.
   var clickedTarget = $(e.target).prop("tagName");
   if (clickedTarget != 'BODY' && clickedTarget != undefined) {
     return;
@@ -78,12 +73,10 @@ Main.prototype.doKeyPress = function (e) {
 };
 
 Main.prototype.monitorUrlChange = function () {
-  // If URL changed, remove the sidebar.
   if (!this.isSameUrl()) {
     this.currentPageUrl = this.getWindowLocationHref();
     $('#jk-hierarchy').remove();
   }
-
 };
 
 Main.prototype.isSameUrl = function () {
@@ -104,10 +97,10 @@ Main.prototype.monitorLazyLoading = function () {
 $(document).ready(function() {
   $('body').on('click', '.load-diff-button', function() {
     var hierarchy = $('<p id="jk-hierarchy"></p>');
-    var decorationService = new DecorationService(hierarchy);
+    var reviewService = new ReviewService(hierarchy);
     var currentId = $(this).closest("div.file").attr("id");
 
-    decorationService.reviewDiffs(currentId);
+    reviewService.reviewDiffs(currentId);
   });
 
   $('body').on('click', '.close-notice', function() {

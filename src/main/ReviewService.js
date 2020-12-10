@@ -3,8 +3,12 @@ var DANGER = 1;
 var DISCO_DEVELOP = "develop";
 var checklistKey = "GITGUD_CHECKLIST";
 
-function DecorationService(element) {
+function ReviewService(element) {
   this.element = element;
+};
+
+String.prototype.htmlSafe = function() {
+  return this.valueOf().replace(/\</g, "&lt;").replace(/\>/g, "&gt;");
 };
 
 function strip(html) {
@@ -12,19 +16,13 @@ function strip(html) {
   return doc.body.textContent || "";
 };
 
-// safety first
-String.prototype.htmlSafe = function() {
-  return this.valueOf().replace(/\</g, "&lt;").replace(/\>/g, "&gt;");
-};
-
-DecorationService.prototype.applyInitStyle = function () {
+ReviewService.prototype.applyInitStyle = function () {
   $(this.element).css('width', $(this.element).width() * 1.2);
   $(this.element).css("background-color", $('body').css('background-color'));
-  // Hide the sidebar by default.
   $(this.element).hide();
 };
 
-DecorationService.prototype.appendCommentCounts = function () {
+ReviewService.prototype.appendCommentCounts = function () {
   var files = $('#jk-hierarchy').find('.jk-file');
 
   $.each(files, function (key, item) {
@@ -38,7 +36,7 @@ DecorationService.prototype.appendCommentCounts = function () {
   });
 };
 
-DecorationService.prototype.appendShowMore = function () {
+ReviewService.prototype.appendShowMore = function () {
   var files = $('#jk-hierarchy').find('.jk-file');
 
   $.each(files, function (key, item) {
@@ -52,14 +50,14 @@ DecorationService.prototype.appendShowMore = function () {
   });
 };
 
-DecorationService.prototype.appendNoDiffMessage = function () {
+ReviewService.prototype.appendNoDiffMessage = function () {
   if ($('#jk-notice').length) return;
 
   $("body").prepend('<div id="jk-notice">No diffs found</div>');
   $('#jk-notice').css("background-color", $('body').css('background-color'));
 };
 
-DecorationService.prototype.appendWrongBaseMessage = function () {
+ReviewService.prototype.appendWrongBaseMessage = function () {
   if ($('#develop-notice').length) return;
 
   var unformattedBase = $('.commit-ref').find(".no-underline").html();
@@ -71,7 +69,7 @@ DecorationService.prototype.appendWrongBaseMessage = function () {
   };
 };
 
-DecorationService.prototype.reviewDiffs = function (singleFile) {
+ReviewService.prototype.reviewDiffs = function (singleFile) {
   if(singleFile) {
     var additions = $('#' + singleFile).find('.blob-code.blob-code-addition');
     // tạo 1 interval để chờ đến khi file được load xong thì bắt đầu review file đó
@@ -99,7 +97,6 @@ DecorationService.prototype.reviewDiffs = function (singleFile) {
 
     $("body").prepend('<span id="reviewed"></span>');
   }
-
 
   function strip(html) {
     var doc = new DOMParser().parseFromString(html, 'text/html');
@@ -164,7 +161,6 @@ DecorationService.prototype.reviewDiffs = function (singleFile) {
   };
 
   function appendIndicators(report, addition, isSingleFile) {
-    // thêm icon và tooltip cho warnings và dangers vào dòng addition, nếu review rồi thì không thêm notice nữa.
     if (!$(addition).hasClass('has-warnings')) appendWarningIndicators(report, addition);
     if (!$(addition).hasClass('has-dangers')) appendDangerIndicators(report, addition);
 
@@ -173,14 +169,24 @@ DecorationService.prototype.reviewDiffs = function (singleFile) {
     };
   };
 
+  function groupByKey(array, key) {
+    return array
+      .reduce(function (hash, obj) {
+        if(obj[key] === undefined) return hash;
+        var res = {};
+        res[obj[key]] = (hash[obj[key]] || []).concat(obj);
+        return Object.assign(hash, res)
+      }, {})
+  };
+
   function review(file, additions, isSingleFile) {
     // lấy PR checklist
     chrome.storage.local.get(checklistKey, function(checklist) {
       var warningCounts = 0;
       var dangerCounts = 0;
+      var fileType = $(file).data('fileType')
+      var PRChecklist = groupByKey(JSON.parse(checklist[checklistKey]), 'file')[fileType];
 
-      PRChecklist = JSON.parse(checklist[checklistKey]);
-      // loop từng line thay đổi
       $.each(additions, function (index, addition) {
         // lấy toàn bộ html của 1 line (chưa format)
         var unformattedLine = $(addition).find(".blob-code-inner.blob-code-marker").html();
@@ -195,7 +201,11 @@ DecorationService.prototype.reviewDiffs = function (singleFile) {
         };
         // loop qua từng record của checklist và check với line hiện tại
         $.each(PRChecklist, function(i, item) {
-          if(line.includes(item.pattern)) {
+          var pattern = (item.regex == 1) ? (new RegExp(item.pattern)) : item.pattern
+          console.log(pattern);
+          console.log(typeof(pattern));
+
+          if(line.match(pattern)) {
             if (item.type == WARNING) {
               report.warningCounts++;
 

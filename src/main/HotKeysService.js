@@ -1,11 +1,8 @@
 function HotKeysService() {
   this.diffNext = 190; // key "." for ">"
   this.diffPrev = 188; // key "," for "<"
-
-  this.toggleSidebar = 77; // key m for "map", duh?
+  this.toggleSidebar = 77; // key m for toggle sidebar
   this.closeSidebar = 27; // key esc to close sidebar
-
-  var that = this;
 };
 
 HotKeysService.prototype.getKeyCodeForNextDiff = function () {
