@@ -202,8 +202,6 @@ ReviewService.prototype.reviewDiffs = function (singleFile) {
         // loop qua từng record của checklist và check với line hiện tại
         $.each(PRChecklist, function(i, item) {
           var pattern = (item.regex == 1) ? (new RegExp(item.pattern)) : item.pattern
-          console.log(pattern);
-          console.log(typeof(pattern));
 
           if(line.match(pattern)) {
             if (item.type == WARNING) {
