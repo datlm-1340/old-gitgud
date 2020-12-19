@@ -1,5 +1,5 @@
 // một vài settings
-var Settings = {
+const Settings = {
   baseURL: "https://v2-api.sheety.co/0e31cded92f461b669291ff171a274fd/prChecklist/",
   checklistKey: "GITGUD_CHECKLIST",
   lastUpdatedAtKey: "GITGUD_LAST_UPDATED_AT",
@@ -45,6 +45,7 @@ function fetchData() {
   var xmlHttpRequest = new XMLHttpRequest();
 
   xmlHttpRequest.open("GET", getChecklistEndpoint(), true);
+  xmlHttpRequest.open("GET", getChecklistEndpoint(), true);
   xmlHttpRequest.send();
 
   xmlHttpRequest.onreadystatechange = function() {
@@ -69,6 +70,13 @@ function fetchData() {
   };
 };
 
+function saveSettings() {
+
+};
+
+function loadSettings() {
+
+};
 $(document).ready(function() {
   chrome.tabs.query({
     active: true,
@@ -88,5 +96,9 @@ $(document).ready(function() {
   // update dữ liệu
   $('#update').click(function () {
     fetchData();
+  });
+
+  $('#save').click(function () {
+    saveData();
   });
 });

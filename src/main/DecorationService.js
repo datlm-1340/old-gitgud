@@ -176,6 +176,7 @@ DecorationService.prototype.reviewDiffs = function (singleFile) {
   function review(file, additions, isSingleFile) {
     // lấy PR checklist
     chrome.storage.local.get(checklistKey, function(checklist) {
+      console.log(checklist);
       var warningCounts = 0;
       var dangerCounts = 0;
 

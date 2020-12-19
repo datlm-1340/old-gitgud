@@ -1,2 +1,2 @@
-var main = new Main();
+const main = new Main();
 main.init();

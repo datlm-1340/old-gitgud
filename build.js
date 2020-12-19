@@ -1,9 +1,9 @@
-var mkdirp = require('mkdirp');
-var ncp = require('ncp').ncp;
-var rimraf = require('rimraf');
-var uglify = require('uglify-js');
-var fs = require('fs');
-var async = require('async');
+const mkdirp = require('mkdirp');
+const ncp = require('ncp').ncp;
+const rimraf = require('rimraf');
+const uglify = require('uglify-js');
+const fs = require('fs');
+const async = require('async');
 
 async.series([
 	function (callback) {

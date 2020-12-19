@@ -8,13 +8,32 @@
         width: 320px;
         padding: 2em;
         background: #ffffff;
+        color: #24292e;
       }
       .header {
         font-size: 150%;
         margin: 0 0 15px;
       }
-      .hotkeys div {
+      .hotkey {
         margin-bottom: 10px;
+      }
+      .form-control {
+        margin: 10px 0px;
+        padding: 5px;
+        width: 100%;
+        width: -webkit-fill-available;
+      }
+      .w-100 {
+        width: 100%;
+      }
+      .w-50 {
+        width: 50%;
+      }
+      .mgR-5 {
+        padding-right: 5px;
+      }
+      .pull-left {
+        float: left;
       }
       small {
         color: #aaa;
@@ -41,13 +60,22 @@
         text-align: center;
         display: block;
         color: #fff;
-        vertical-align: baseline;
         background-color: #2cbe4e;
+        border: 1px solid #2b9148;
+      }
+      #save {
+        cursor: pointer;
+        padding: 10px 0px;
+        width: 100%;
+        text-align: center;
+        display: block;
+        color: #24292e;
+        background-color: #f0f8ff;
+        border: 1px solid #d0d8de;
       }
       #not-on-github-popup, #main-popup {
         display: none;
       }
-
     </style>
   </head>
   <body>
@@ -60,19 +88,52 @@
       <div><small>Hotkeys:</small></div>
       <br>
       <div class="hotkeys">
-        <div>
+        <div class="hotkey">
           <span class="btn">M</span>&nbsp;open directory bar
         </div>
-        <div>
+        <div class="hotkey">
           <span class="btn">,</span>&nbsp;previous file
         </div>
-        <div>
+        <div class="hotkey">
           <span class="btn">.</span>&nbsp;next file
         </div>
       </div>
       <div><small>Update checklist:</small></div>
       <br>
       <span id="update">Update</span>
+    </div>
+
+    <div id="setting-popup">
+      <div class="settings">
+        <div class="w-100">
+          <div><small>Choose Repository:</small></div>
+
+          <select class="form-control">
+            <option value="">Add new repository</option>
+            <option value="DISCO">DISCO</option>
+            <option value="Jooto">Jooto</option>
+          </select>
+        </div>
+        <div class="w-100">
+          <div><small>Repository:</small></div>
+          <input class="form-control" type="text" id="settings-repository" placeholder="Repository URL" />
+        </div>
+        <div class="w-100">
+          <div><small>Endpoint:</small></div>
+          <input class="form-control" type="text" id="settings-endpoint" placeholder="Endpoint" />
+        </div>
+        <div class="w-50 pull-left">
+          <div><small>Username:</small></div>
+          <input class="form-control" type="text" id="settings-username" placeholder="Username" />
+        </div>
+        <div class="w-50 pull-left">
+          <div><small>Password:</small></div>
+          <input class="form-control" type="password" id="settings-password" placeholder="Password" />
+        </div>
+      </div>
+      <div><small>Save settings:</small></div>
+      <br>
+      <span id="save">Save settings</span>
     </div>
 
     <script src="static/js/vendor.min.js"></script>
