@@ -8,6 +8,8 @@
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
     "requirejs": "^2.2.0",
+    "rimraf": "^3.0.0",
+    "terser": "^5.5.0",
     "uglify-js": "^2.7.3",
     "zip-folder": "^1.0.0"
   },
@@ -23,10 +25,12 @@
       "extensions": "js,html,css,json"
     }
   },
-  "author": "Irek Mirgaleev",
+  "author": "Le Manh Dat",
   "repository": "https://github.com/datlm-1340/gitgud",
   "license": "ISC",
   "dependencies": {
-    "npm-watch": "^0.7.0"
+    "lodash": "^4.17.20",
+    "npm-watch": "^0.7.0",
+    "rimraf": "^3.0.2"
   }
 }
