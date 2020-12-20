@@ -2,9 +2,16 @@
 const Settings = {
   baseURL: "https://v2-api.sheety.co/0e31cded92f461b669291ff171a274fd/prChecklist/",
   checklistKey: "GITGUD_CHECKLIST",
-  lastUpdatedAtKey: "GITGUD_LAST_UPDATED_AT",
+  gitgud: "GITGUD",
   repositoryKey: "GITGUD_REPOSITORY",
-  repositoryKeySplitIndex: 4
+  repositoryList: "GITGUD_REPOSITORIES",
+  repositoryKeyIndex: 4,
+  settingAttributes: [
+    'repository-url',
+    'endpoint',
+    'username',
+    'password'
+  ]
 };
 
 function saveRepositoryKey() {
@@ -15,68 +22,160 @@ function saveRepositoryKey() {
   }, function(tabs) {
       // lấy slug của repo
       var currentTab = tabs[0];
+      console.log(currentTab);
+      console.log(tabs);
       if(currentTab.url.includes('github.com')) {
-        var repositoryKey = currentTab.url.split("/")[Settings.repositoryKeySplitIndex].toLowerCase();
+        var repositoryKey = currentTab.url.split("/")[Settings.repositoryKeyIndex];
 
         // sau đó lưu vào session để dùng
         sessionStorage.setItem(Settings.repositoryKey, repositoryKey);
       };
   });
+  return sessionStorage.getItem(Settings.repositoryKey);
 };
 
 function getRepositoryKey() {
-  return sessionStorage.getItem(Settings.repositoryKey);
-}
-
-// lấy API Endpoint của checklist trong repository hiện tại
-function getChecklistEndpoint() {
-  var repositoryKey = getRepositoryKey();
+  var repositoryKey = sessionStorage.getItem(Settings.repositoryKey);
 
   if (repositoryKey === null) {
     saveRepositoryKey();
-    repositoryKey = getRepositoryKey();
+    repositoryKey = sessionStorage.getItem(Settings.repositoryKey);
   }
-  return Settings.baseURL + repositoryKey;
+  return repositoryKey;
 }
 
 // request lên API Endpoint để lấy dữ liệu
 function fetchData() {
-  var repositoryKey = getRepositoryKey();
-  var xmlHttpRequest = new XMLHttpRequest();
+  chrome.tabs.query({
+    active: true,
+    lastFocusedWindow: true
+  }, function(tabs) {
+    // lấy slug của repo
+    var currentTab = tabs[0];
 
-  xmlHttpRequest.open("GET", getChecklistEndpoint(), true);
-  xmlHttpRequest.open("GET", getChecklistEndpoint(), true);
-  xmlHttpRequest.send();
+    if(currentTab.url.includes('github.com')) {
+      var repositoryKey = currentTab.url.split("/")[Settings.repositoryKeyIndex];
 
-  xmlHttpRequest.onreadystatechange = function() {
-    if (this.readyState === 4 && this.status === 200) {
-      var responseData = JSON.parse(this.response)[repositoryKey];
-      var storageData = {};
-      // lưu dữ liệu vào local storage để dùng
-      storageData[Settings.checklistKey] = JSON.stringify(responseData);
-      storageData[Settings.lastUpdatedAtKey] = new Date().getTime();
+      chrome.storage.local.get(repositoryKey, function(data) {
+        var repositoryData = JSON.parse(data[repositoryKey]);
+        var xmlHttpRequest = new XMLHttpRequest();
 
-      chrome.storage.local.set(storageData);
+        xmlHttpRequest.open("GET", repositoryData.endpoint, true);
+        xmlHttpRequest.setRequestHeader("Authorization", "Basic " + basicAuthEncode(repositoryData));
+        xmlHttpRequest.send();
 
-      // update thành công thì thông báo rồi reload page
-      alert("UPDATE THÀNH CÔNG");
-      chrome.tabs.query({active: true, currentWindow: true}, function (arrayOfTabs) {
-        var code = 'window.location.reload();';
-        chrome.tabs.executeScript(arrayOfTabs[0].id, {code: code});
+        xmlHttpRequest.onreadystatechange = function() {
+          if (this.readyState === 4 && this.status === 200) {
+            var result = JSON.parse(this.response)[repositoryKey.toLowerCase()];
+            saveChecklist(repositoryKey, repositoryData, result)
+            alert("UPDATE THÀNH CÔNG");
+            chrome.tabs.query({active: true, currentWindow: true}, function (arrayOfTabs) {
+              var code = 'window.location.reload();';
+              chrome.tabs.executeScript(arrayOfTabs[0].id, {code: code});
+            });
+          } else if (this.readyState === 4 && this.status !== 200) {
+            alert("UPDATE THẤT BẠI");
+          }
+        };
       });
-    } else if (this.readyState === 4 && this.status === 400) {
-      alert("UPDATE THẤT BẠI");
     }
+  });
+};
+
+function basicAuthEncode(data) {
+  if (!data) return;
+  return btoa(data.username + ":" + data.password)
+}
+
+function saveChecklist(key, data, result) {
+  var storageData = {};
+
+  data['checklist'] = result;
+  storageData[key] = JSON.stringify(data);
+  chrome.storage.local.set(storageData);
+}
+
+function saveSettings(repositoryKey) {
+  var settings = {};
+  var repositoryData = {};
+  var nullCount = 0;
+
+  Settings.settingAttributes.forEach(function (attr) {
+    if(!$('#' + attr).val().length) {
+      nullCount++;
+      return
+    };
+
+    settings[attr] = $('#' + attr).val();
+  });
+
+  if(nullCount > 0) return;
+
+  repositoryData[repositoryKey] = JSON.stringify(settings);
+
+  chrome.storage.local.set(repositoryData, function() {
+    chrome.storage.local.get(null, function(items) {
+      var allKeys = Object.keys(items);
+
+      if (!allKeys.includes(Settings.repositoryList)) {
+        chrome.storage.local.set({
+          GITGUD_REPOSITORIES: []
+        }, addToRepositoryList(repositoryKey));
+      } else {
+        addToRepositoryList(repositoryKey);
+      }
+    });
+
+    fetchData();
+  });
+};
+
+function loadSettings(repositoryKey) {
+  if(!repositoryKey) {
+    Settings.settingAttributes.forEach(function (attr) {
+      $('#' + attr).val(null);
+    });
+
+    return;
   };
+
+  chrome.storage.local.get(repositoryKey, function(data) {
+    if (data) {
+      var settings = JSON.parse(data[repositoryKey]);
+
+      Settings.settingAttributes.forEach(function (attr) {
+        $('#' + attr).val(settings[attr]);
+      });
+    }
+  });
 };
 
-function saveSettings() {
+function loadOptionForSelects(repositoryKey) {
+  chrome.storage.local.get(Settings.repositoryList, function(data) {
+    var repositoryList = data[Settings.repositoryList];
 
+    repositoryList.forEach(function (repository) {
+      $('#repository').append($('<option>', {
+        value: repository,
+        text : repository
+      }));
+    });
+  });
 };
 
-function loadSettings() {
+function addToRepositoryList(repositoryKey) {
+  chrome.storage.local.get(Settings.repositoryList, function(data) {
+    var repositoryList = data[Settings.repositoryList];
+    repositoryList.push(repositoryKey);
+    uniqueRepositoryList = repositoryList.filter(function(value, index, self) {
+      return self.indexOf(value) === index && value != null && value != undefined;
+    });
 
-};
+    data[Settings.repositoryList] = uniqueRepositoryList;
+    chrome.storage.local.set(data);
+  });
+}
+
 $(document).ready(function() {
   chrome.tabs.query({
     active: true,
@@ -91,14 +190,39 @@ $(document).ready(function() {
       $("#main-popup").hide();
     }
   });
-  saveRepositoryKey();
 
-  // update dữ liệu
+  var repositoryKey = $('#repository').val() || $('#repository-url').val().split("/")[Settings.repositoryKeyIndex];
+  loadSettings(repositoryKey);
+  loadOptionForSelects(repositoryKey);
+
   $('#update').click(function () {
     fetchData();
   });
 
-  $('#save').click(function () {
-    saveData();
+  $('#setting-popup').on('submit', function (e) {
+    e.preventDefault();
+
+    var repositoryKey = $('#repository').val() || $('#repository-url').val().split("/")[Settings.repositoryKeyIndex];
+    saveSettings(repositoryKey);
+  });
+
+  $('#repository').on('change', function () {
+    loadSettings($('#repository').val());
+  });
+
+  $('#setting-btn').on('click', function () {
+    $('#back-btn').show();
+    $('#setting-btn').hide();
+
+    $('#setting-popup').show();
+    $('#main-popup').hide();
+  });
+
+  $('#back-btn').on('click', function () {
+    $('#back-btn').hide();
+    $('#setting-btn').show();
+
+    $('#setting-popup').hide();
+    $('#main-popup').show();
   });
 });

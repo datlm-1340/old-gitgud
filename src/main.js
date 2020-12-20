@@ -49,7 +49,7 @@ Main.prototype.generateApp = function () {
   reviewService.appendShowMore();
   reviewService.appendCommentCounts();
   reviewService.appendNoDiffMessage();
-  reviewService.appendWrongBaseMessage();
+  // reviewService.appendWrongBaseMessage();
 
   var appInteractionService = new AppInteractionService(this.toolBarHeight, this.hotKeysService, this);
   appInteractionService.attachFolderCollapseBehavior(hierarchy);

@@ -29,11 +29,22 @@
       .w-50 {
         width: 50%;
       }
-      .mgR-5 {
-        padding-right: 5px;
-      }
       .pull-left {
         float: left;
+      }
+      .pull-right {
+        float: right;
+      }
+      .nav-btn {
+        margin-top: 10px;
+        font-size: 80%;
+      }
+      .nav-btn a{
+        color: #aaa;
+        text-decoration: none;
+      }
+      .nav-btn a:hover{
+        color: #888;
       }
       small {
         color: #aaa;
@@ -73,7 +84,7 @@
         background-color: #f0f8ff;
         border: 1px solid #d0d8de;
       }
-      #not-on-github-popup, #main-popup {
+      #not-on-github-popup, #main-popup, #setting-popup, #back-btn {
         display: none;
       }
     </style>
@@ -98,44 +109,54 @@
           <span class="btn">.</span>&nbsp;next file
         </div>
       </div>
-      <div><small>Update checklist:</small></div>
+      <div><small>Sync checklist:</small></div>
       <br>
-      <span id="update">Update</span>
+      <button id="update">Sync</button>
     </div>
 
-    <div id="setting-popup">
+    <form id="setting-popup">
       <div class="settings">
         <div class="w-100">
           <div><small>Choose Repository:</small></div>
 
-          <select class="form-control">
+          <select id="repository" class="form-control">
             <option value="">Add new repository</option>
-            <option value="DISCO">DISCO</option>
-            <option value="Jooto">Jooto</option>
           </select>
         </div>
         <div class="w-100">
           <div><small>Repository:</small></div>
-          <input class="form-control" type="text" id="settings-repository" placeholder="Repository URL" />
+          <input class="form-control" type="text" required id="repository-url" placeholder="Repository URL" />
         </div>
         <div class="w-100">
           <div><small>Endpoint:</small></div>
-          <input class="form-control" type="text" id="settings-endpoint" placeholder="Endpoint" />
+          <input class="form-control" type="text" required id="endpoint" placeholder="Endpoint" />
         </div>
-        <div class="w-50 pull-left">
+        <div class="w-100">
           <div><small>Username:</small></div>
-          <input class="form-control" type="text" id="settings-username" placeholder="Username" />
+          <input class="form-control" type="text" required id="username" placeholder="Username" />
         </div>
-        <div class="w-50 pull-left">
+        <div class="w-100">
           <div><small>Password:</small></div>
-          <input class="form-control" type="password" id="settings-password" placeholder="Password" />
+          <input class="form-control" type="password" required id="password" placeholder="Password" />
         </div>
       </div>
       <div><small>Save settings:</small></div>
       <br>
-      <span id="save">Save settings</span>
-    </div>
+      <button type="submit" id="save">Save settings</button>
+    </form>
 
+    <div class="footer">
+      <div class="pull-left nav-btn" id="back-btn">
+        <a href="javascript:void(0)">
+          Back
+        </a>
+      </div>
+      <div class="pull-right nav-btn" id="setting-btn">
+        <a href="javascript:void(0)">
+          Settings
+        </a>
+      </div>
+    </div>
     <script src="static/js/vendor.min.js"></script>
     <script src="static/js/index.min.js"></script>
   </body>

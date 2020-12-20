@@ -181,12 +181,13 @@ ReviewService.prototype.reviewDiffs = function (singleFile) {
 
   function review(file, additions, isSingleFile) {
     // lấy PR checklist
-    chrome.storage.local.get(checklistKey, function(checklist) {
-      console.log(checklist);
+    var repositoryKey = window.location.href.split("/")[4];
+    chrome.storage.local.get(repositoryKey, function(checklist) {
       var warningCounts = 0;
       var dangerCounts = 0;
-      var fileType = $(file).data('fileType')
-      var PRChecklist = groupByKey(JSON.parse(checklist[checklistKey]), 'file')[fileType];
+      var fileType = $(file).data('fileType');
+      if(!checklist[repositoryKey]) return;
+      var PRChecklist = groupByKey(JSON.parse(checklist[repositoryKey]).checklist, 'file')[fileType];
 
       $.each(additions, function (index, addition) {
         // lấy toàn bộ html của 1 line (chưa format)
