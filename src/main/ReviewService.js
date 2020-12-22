@@ -52,34 +52,19 @@ ReviewService.prototype.appendNoDiffMessage = function () {
   if ($('#jk-notice').length) return;
 
   $("body").prepend('<div id="jk-notice">No diffs found</div>');
-  $('#jk-notice').css("background-color", $('body').css('background-color'));
-};
-
-ReviewService.prototype.appendWrongBaseMessage = function () {
-  if ($('#develop-notice').length) return;
-
-  var unformattedBase = $('.commit-ref').find(".no-underline").html();
-  var base = strip(unformattedBase);
-
-  if (base.includes(DISCO_DEVELOP)) {
-    var notice = "THIS PULL REQUEST IS ON DEVELOP BASE, PLEASE CHANGE BASE IF NOT NEEDED"
-    $("body").prepend('<div id="develop-notice">' + notice + '<div class="close-notice">&times;</div></div>');
-  };
 };
 
 ReviewService.prototype.reviewDiffs = function (singleFile) {
   if(singleFile) {
     var additions = $('#' + singleFile).find('.blob-code.blob-code-addition');
-    // tạo 1 interval để chờ đến khi file được load xong thì bắt đầu review file đó
     var interval = setInterval(function() {
       if(!additions.length) {
         additions = $('#' + singleFile).find('.blob-code.blob-code-addition');
       } else {
         var file = $("#jk-hierarchy ").find("[data-file-id=" + singleFile + "]");
+
         $(file).find(".unopened-count").hide();
-        // review lại file hiện tại
         review(file, additions, true);
-        // clear interval hiện tại
         clearInterval(interval);
       }
     }, 1000);
@@ -93,6 +78,7 @@ ReviewService.prototype.reviewDiffs = function (singleFile) {
       review(file, additions);
     });
 
+    $("#reviewed").remove();
     $("body").prepend('<span id="reviewed"></span>');
   }
 
@@ -178,54 +164,52 @@ ReviewService.prototype.reviewDiffs = function (singleFile) {
   };
 
   function review(file, additions, isSingleFile) {
-    // lấy PR checklist
     var repositoryKey = window.location.href.split("/")[4];
+
     chrome.storage.local.get(repositoryKey, function(checklist) {
       var warningCounts = 0;
       var dangerCounts = 0;
       var fileType = $(file).data('fileType');
-      if(!checklist[repositoryKey]) return;
-      var PRChecklist = groupByKey(JSON.parse(checklist[repositoryKey]).checklist, 'file')[fileType];
+      var checklistData = JSON.parse(checklist[repositoryKey]).checklist;
+
+      if (!checklistData) return;
+
+      var PRChecklist = groupByKey(checklistData, 'file')[fileType];
 
       $.each(additions, function (index, addition) {
-        // lấy toàn bộ html của 1 line (chưa format)
         var unformattedLine = $(addition).find(".blob-code-inner.blob-code-marker").html();
-        // gộp html của github để lấy nội dung của 1 line
         var line = strip(unformattedLine);
-        // khai báo báo cáo lỗi của từng line
         var report = {
           warnings: [],
           dangers: [],
           warningCounts: 0,
           dangerCounts: 0
         };
-        // loop qua từng record của checklist và check với line hiện tại
+
         $.each(PRChecklist, function(i, item) {
           var pattern = (item.regex == 1) ? (new RegExp(item.pattern)) : item.pattern
 
           if(line.match(pattern)) {
             if (item.type == WARNING) {
               report.warningCounts++;
-
               if(item.note.length) {
                 report.warnings.push(item.note.htmlSafe());
               }
             } else {
               report.dangerCounts++;
-
               if(item.note.length) {
                 report.dangers.push(item.note.htmlSafe());
               }
             }
           }
         });
-        // thêm thông báo cho từng dòng
+
         appendIndicators(report, addition);
-        // đếm số lỗi trong 1 file
+
         warningCounts += report.warningCounts;
         dangerCounts += report.dangerCounts;
       });
-      // thêm số lượng lỗi ở sau tên file
+
       appendWarningCounts(warningCounts, file);
       appendDangerCounts(dangerCounts, file);
     });

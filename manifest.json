@@ -7,6 +7,7 @@
     "default_icon": "images/icon.png",
     "default_popup": "index.html"
   },
+  "options_page": "options.html",
   "permissions": [
     "tabs",
     "activeTab",
@@ -29,6 +30,7 @@
   ],
   "web_accessible_resources": [
     "images/*.svg",
-    "images/*.png"
+    "images/*.png",
+    "options.html"
   ]
 }

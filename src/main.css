@@ -118,13 +118,19 @@
   display: none;
   position: fixed;
   font-size: 5em;
-  left: 30%;
+  left: calc(50% - 160px);
   top: 20%;
   z-index: 100;
   padding: 10px 20px;
-}
-
-/*tooltip css*/
+  width: 320px;
+  font-size: 1em;
+  background: #fffbdd;
+  color: #24292e;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 6px;
+  border: 1px solid #efe4b1;
+};
 
 .gitgud-tooltip {
   cursor: pointer;

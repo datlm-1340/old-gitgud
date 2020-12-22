@@ -52,13 +52,11 @@ HierarchyGeneratorService.prototype.compressHierarchy = function (hierarchy) {
 
   function traverse(obj, newObj, path) {
     for (var key in obj) {
-
       if (!path || typeof obj[key] != 'string') {
         path = path + String(key) + '/';
       }
 
       if (typeof obj[key] == 'string') {
-
         if (Object.keys(obj).length == 1) {
           newObj[path] = {};
           newObj[path][String(key) + '/'] = obj[key];
@@ -78,22 +76,17 @@ HierarchyGeneratorService.prototype.compressHierarchy = function (hierarchy) {
       }
 
       traverse(obj[key], newObj, path);
-
       path = "";
-
     }
   }
 };
 
 HierarchyGeneratorService.prototype.generateAndApplyHtml = function (hierarchy, structure, fileIDs) {
   var list = $(document.createElement('ul'));
-
   var that = this;
 
   $.each(structure, function (index, file) {
-
     var label = (typeof file == 'string') ? file : index;
-
     var item = $('<li>' + label + '</li>');
 
     if (typeof structure[index] === 'object') {
