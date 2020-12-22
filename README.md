@@ -64,3 +64,5 @@ $ npm run build
     + Cột `regex`: 1 là có sử dụng, 0 là không sử dụng (sẽ tìm chính xác từ ở cột `pattern`)
 - Một khi đã setting đầy đủ, để sử dụng ta chỉ việc vào các PR và `gitgud` sẽ tự động đặt các warning ở những thay đổi match với các pattern được định nghiã trong checklist. 
 - Có thể ấn `M` để mở cây thư mục và điều hướng giữa các file.
+
+Có tham khảo chức năng cây thư mục chttps://github.com/irek02/chrome-github-code-review
