@@ -65,4 +65,4 @@ $ npm run build
 - Một khi đã setting đầy đủ, để sử dụng ta chỉ việc vào các PR và `gitgud` sẽ tự động đặt các warning ở những thay đổi match với các pattern được định nghiã trong checklist. 
 - Có thể ấn `M` để mở cây thư mục và điều hướng giữa các file.
 
-Có tham khảo chức năng cây thư mục chttps://github.com/irek02/chrome-github-code-review
+Có tham khảo chức năng cây thư mục của [https://github.com/irek02/chrome-github-code-review](https://github.com/irek02/chrome-github-code-review)
