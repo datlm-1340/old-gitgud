@@ -1,7 +1,5 @@
 var WARNING = 0;
 var DANGER = 1;
-var DISCO_DEVELOP = "develop";
-var checklistKey = "GITGUD_CHECKLIST";
 
 function ReviewService(element) {
   this.element = element;
