@@ -1,8 +1,6 @@
 // một vài settings
 const Settings = {
-  baseURL: "https://v2-api.sheety.co/0e31cded92f461b669291ff171a274fd/prChecklist/",
   checklistKey: "GITGUD_CHECKLIST",
-  gitgud: "GITGUD",
   repositoryKey: "GITGUD_REPOSITORY",
   repositoryList: "GITGUD_REPOSITORIES",
   repositoryKeyIndex: 4,
@@ -188,6 +186,8 @@ $(document).ready(function() {
     } else {
       $("#not-on-github-popup").show();
       $("#main-popup").hide();
+      $('#setting-btn').hide();
+      $('#back-btn').hide();
     }
   });
 
