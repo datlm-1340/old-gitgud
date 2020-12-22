@@ -1,13 +1,10 @@
 function Main() {}
 
 Main.prototype.init = function () {
-
   this.hiddenSidebarUrls = [];
   this.pageLoadWaitTimeout = 1000;
   this.initialNumberOfFiles = 0;
-
   this.hotKeysService = new HotKeysService();
-
   this.generateApp();
 
   if (window == top) {
@@ -16,7 +13,6 @@ Main.prototype.init = function () {
   }
 
   setInterval(this.monitorLazyLoading.bind(this), 100);
-
 };
 
 Main.prototype.generateApp = function () {
@@ -37,8 +33,8 @@ Main.prototype.generateApp = function () {
   });
 
   var hierarchy = $('<p id="jk-hierarchy"></p>');
-
   var hierarchyGenerator = new HierarchyGeneratorService();
+
   hierarchyGenerator.generateAndApplyHierarchyHtml(files, fileIDs, hierarchy);
 
   $("body").prepend(hierarchy);
@@ -49,7 +45,6 @@ Main.prototype.generateApp = function () {
   reviewService.appendShowMore();
   reviewService.appendCommentCounts();
   reviewService.appendNoDiffMessage();
-  // reviewService.appendWrongBaseMessage();
 
   var appInteractionService = new AppInteractionService(this.toolBarHeight, this.hotKeysService, this);
   appInteractionService.attachFolderCollapseBehavior(hierarchy);
@@ -60,7 +55,6 @@ Main.prototype.generateApp = function () {
 };
 
 Main.prototype.doKeyPress = function (e) {
-
   var clickedTarget = $(e.target).prop("tagName");
   if (clickedTarget != 'BODY' && clickedTarget != undefined) {
     return;
@@ -69,7 +63,6 @@ Main.prototype.doKeyPress = function (e) {
   if (this.hotKeysService.isValidKeyCode(e.keyCode)) {
     this.appInteractionService.respondToHotKey(e.keyCode);
   }
-
 };
 
 Main.prototype.monitorUrlChange = function () {
@@ -101,11 +94,5 @@ $(document).ready(function() {
     var currentId = $(this).closest("div.file").attr("id");
 
     reviewService.reviewDiffs(currentId);
-  });
-
-  $('body').on('click', '.close-notice', function() {
-    if (confirm('Are you sure you want to hide this notice?')) {
-      $('#develop-notice').hide();
-    }
   });
 });

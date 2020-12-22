@@ -1,6 +1,6 @@
 {
   "name": "gitgud",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "This extension adds hot keys and hierarchical file view to GitHub pull request pages. Also show warnings from a pre-defined checklist",
   "main": "main.js",
   "devDependencies": {
@@ -9,7 +9,6 @@
     "ncp": "^2.0.0",
     "requirejs": "^2.2.0",
     "rimraf": "^3.0.0",
-    "terser": "^5.5.0",
     "uglify-js": "^2.7.3",
     "zip-folder": "^1.0.0"
   },

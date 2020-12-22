@@ -2,94 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <style>
-      body {
-        font-size: 100%;
-        width: 320px;
-        padding: 2em;
-        background: #ffffff;
-        color: #24292e;
-      }
-      .header {
-        font-size: 150%;
-        margin: 0 0 15px;
-      }
-      .hotkey {
-        margin-bottom: 10px;
-      }
-      .form-control {
-        margin: 10px 0px;
-        padding: 5px;
-        width: 100%;
-        width: -webkit-fill-available;
-      }
-      .w-100 {
-        width: 100%;
-      }
-      .w-50 {
-        width: 50%;
-      }
-      .pull-left {
-        float: left;
-      }
-      .pull-right {
-        float: right;
-      }
-      .nav-btn {
-        margin-top: 10px;
-        font-size: 80%;
-      }
-      .nav-btn a{
-        color: #aaa;
-        text-decoration: none;
-      }
-      .nav-btn a:hover{
-        color: #888;
-      }
-      small {
-        color: #aaa;
-      }
-      .btn {
-        cursor: pointer;
-        padding: 5px;
-        height: 1em;
-        width: 1em;
-        text-align: center;
-        display: inline-block;
-        color: inherit;
-        vertical-align: baseline;
-        background-color: #fcfcfc;
-        border: solid 1px #ccc;
-        border-bottom-color: #bbb;
-        border-radius: 3px;
-        box-shadow: inset 0 -1px 0 #bbb;
-      }
-      #update {
-        cursor: pointer;
-        padding: 10px 0px;
-        width: 100%;
-        text-align: center;
-        display: block;
-        color: #fff;
-        background-color: #2cbe4e;
-        border: 1px solid #2b9148;
-      }
-      #save {
-        cursor: pointer;
-        padding: 10px 0px;
-        width: 100%;
-        text-align: center;
-        display: block;
-        color: #24292e;
-        background-color: #f0f8ff;
-        border: 1px solid #d0d8de;
-      }
-      #not-on-github-popup, #main-popup, #setting-popup, #back-btn {
-        display: none;
-      }
-    </style>
+    <link href="static/css/style.css" rel="stylesheet">
   </head>
-  <body>
+  <body id="main">
     <div class="header">GITGUD - Make git gud again</div>
     <hr>
     <div id="not-on-github-popup">
@@ -114,45 +29,9 @@
       <button id="update">Sync</button>
     </div>
 
-    <form id="setting-popup">
-      <div class="settings">
-        <div class="w-100">
-          <div><small>Choose Repository:</small></div>
-
-          <select id="repository" class="form-control">
-            <option value="">Add new repository</option>
-          </select>
-        </div>
-        <div class="w-100">
-          <div><small>Repository:</small></div>
-          <input class="form-control" type="text" required id="repository-url" placeholder="Repository URL" />
-        </div>
-        <div class="w-100">
-          <div><small>Endpoint:</small></div>
-          <input class="form-control" type="text" required id="endpoint" placeholder="Endpoint" />
-        </div>
-        <div class="w-100">
-          <div><small>Username:</small></div>
-          <input class="form-control" type="text" required id="username" placeholder="Username" />
-        </div>
-        <div class="w-100">
-          <div><small>Password:</small></div>
-          <input class="form-control" type="password" required id="password" placeholder="Password" />
-        </div>
-      </div>
-      <div><small>Save settings:</small></div>
-      <br>
-      <button type="submit" id="save">Save settings</button>
-    </form>
-
     <div class="footer">
-      <div class="pull-left nav-btn" id="back-btn">
-        <a href="javascript:void(0)">
-          Back
-        </a>
-      </div>
       <div class="pull-right nav-btn" id="setting-btn">
-        <a href="javascript:void(0)">
+        <a href="#">
           Settings
         </a>
       </div>

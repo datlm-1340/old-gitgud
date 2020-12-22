@@ -1,19 +1,13 @@
 function AppInteractionService(toolBarHeight, hotKeysService, main) {
-
   this.toolBarHeight = toolBarHeight;
-
   this.currentFileId = null;
   this.currentCommentId = null;
   this.files = this.getFiles();
-
   this.hotKeysService = hotKeysService;
-
   this.main = main;
-
-}
+};
 
 AppInteractionService.prototype.attachFolderCollapseBehavior = function (element) {
-
   $(element).find('.folder').click(function () {
     $header = $(this);
     $content = $header.next();
@@ -21,11 +15,9 @@ AppInteractionService.prototype.attachFolderCollapseBehavior = function (element
       $header.toggleClass('collapsed');
     });
   });
-
 };
 
 AppInteractionService.prototype.attachJumpOnClickBehavior = function (element) {
-
   var that = this;
 
   $(element).find('.jk-file').click(function () {
@@ -36,22 +28,18 @@ AppInteractionService.prototype.attachJumpOnClickBehavior = function (element) {
 
     that.currentFileId = $(this).data('file-id').split('-')[1];
   });
-
 };
 
 AppInteractionService.prototype.scrollTo = function (element) {
-
   if (!$(element).length) return;
 
   var offTop = $(element).offset().top - this.toolBarHeight - 10;
 
   $('html,body').scrollTop(offTop);
   this.updateCurentDiffPos();
-
 };
 
 AppInteractionService.prototype.updateCurentDiffPos = function () {
-
   if ($('#jk-hierarchy').is(":visible") && $('#jk-hierarchy').find('.jk-file.current').is(":visible")) {
     while (isAbove()) {
       $('#jk-hierarchy').scrollTop($('#jk-hierarchy').scrollTop() - 10);
@@ -62,7 +50,6 @@ AppInteractionService.prototype.updateCurentDiffPos = function () {
     }
   }
 
-
   function isAbove() {
     var pos = $('#jk-hierarchy').find('.jk-file.current').position();
     return pos && pos.top < 0;
@@ -72,7 +59,6 @@ AppInteractionService.prototype.updateCurentDiffPos = function () {
     var pos = $('#jk-hierarchy').find('.jk-file.current').position();
     return pos && pos.top > $('#jk-hierarchy').height();
   }
-
 };
 
 AppInteractionService.prototype.getFiles = function () {
@@ -107,8 +93,6 @@ AppInteractionService.prototype.respondToHotKey = function (keyCode) {
   }
 
   if (this.hotKeysService.isValidKeyCodeForSideBarToggle(keyCode)) {
-
-    // If the sidebar does not exist, re-generate it.
     if (!this.isSidebarHaveContents()) {
       $('#jk-hierarchy').remove();
       this.main.generateApp();
@@ -117,9 +101,8 @@ AppInteractionService.prototype.respondToHotKey = function (keyCode) {
     if (this.isSidebarHaveContents()) {
       $('#jk-hierarchy').toggle();
     } else {
-      $("#jk-notice").show().delay(600).fadeOut(600);
+      $("#jk-notice").show().delay(1000).fadeOut(1000);
     }
-
   }
 
   if (this.hotKeysService.isValidKeyCodeForCloseSidebar(keyCode)) {
@@ -127,7 +110,6 @@ AppInteractionService.prototype.respondToHotKey = function (keyCode) {
       $('#jk-hierarchy').hide();
     }
   }
-
 };
 
 AppInteractionService.prototype.isSidebarHaveContents = function () {

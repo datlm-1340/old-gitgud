@@ -1,4 +1,3 @@
-// một vài settings
 const Settings = {
   checklistKey: "GITGUD_CHECKLIST",
   repositoryKey: "GITGUD_REPOSITORY",
@@ -13,19 +12,14 @@ const Settings = {
 };
 
 function saveRepositoryKey() {
-  // lấy url của tab đang mở
   chrome.tabs.query({
     active: true,
     lastFocusedWindow: true
   }, function(tabs) {
-      // lấy slug của repo
       var currentTab = tabs[0];
-      console.log(currentTab);
-      console.log(tabs);
       if(currentTab.url.includes('github.com')) {
         var repositoryKey = currentTab.url.split("/")[Settings.repositoryKeyIndex];
 
-        // sau đó lưu vào session để dùng
         sessionStorage.setItem(Settings.repositoryKey, repositoryKey);
       };
   });
@@ -42,17 +36,16 @@ function getRepositoryKey() {
   return repositoryKey;
 }
 
-// request lên API Endpoint để lấy dữ liệu
-function fetchData() {
+function fetchData(isSetting, settings) {
   chrome.tabs.query({
     active: true,
     lastFocusedWindow: true
   }, function(tabs) {
-    // lấy slug của repo
     var currentTab = tabs[0];
 
-    if(currentTab.url.includes('github.com')) {
-      var repositoryKey = currentTab.url.split("/")[Settings.repositoryKeyIndex];
+    if(currentTab.url.includes('github.com') || isSetting == true) {
+      var url = settings ? settings['repository-url'] : currentTab.url;
+      var repositoryKey = url.split("/")[Settings.repositoryKeyIndex];
 
       chrome.storage.local.get(repositoryKey, function(data) {
         var repositoryData = JSON.parse(data[repositoryKey]);
@@ -65,12 +58,18 @@ function fetchData() {
         xmlHttpRequest.onreadystatechange = function() {
           if (this.readyState === 4 && this.status === 200) {
             var result = JSON.parse(this.response)[repositoryKey.toLowerCase()];
+
             saveChecklist(repositoryKey, repositoryData, result)
             alert("UPDATE THÀNH CÔNG");
-            chrome.tabs.query({active: true, currentWindow: true}, function (arrayOfTabs) {
-              var code = 'window.location.reload();';
-              chrome.tabs.executeScript(arrayOfTabs[0].id, {code: code});
-            });
+
+            if (isSetting == true) {
+              window.open(settings['repository-url']);
+            } else {
+              chrome.tabs.query({active: true, currentWindow: true}, function (arrayOfTabs) {
+                var code = 'window.location.reload();';
+                chrome.tabs.executeScript(arrayOfTabs[0].id, {code: code});
+              });
+            }
           } else if (this.readyState === 4 && this.status !== 200) {
             alert("UPDATE THẤT BẠI");
           }
@@ -124,7 +123,7 @@ function saveSettings(repositoryKey) {
       }
     });
 
-    fetchData();
+    fetchData(true, settings);
   });
 };
 
@@ -187,13 +186,17 @@ $(document).ready(function() {
       $("#not-on-github-popup").show();
       $("#main-popup").hide();
       $('#setting-btn').hide();
-      $('#back-btn').hide();
     }
   });
 
-  var repositoryKey = $('#repository').val() || $('#repository-url').val().split("/")[Settings.repositoryKeyIndex];
-  loadSettings(repositoryKey);
-  loadOptionForSelects(repositoryKey);
+  var repositoryURL = $('#repository').val() || $('#repository-url').val();
+
+  if (repositoryURL) {
+    var repositoryKey = repositoryURL.split("/")[Settings.repositoryKeyIndex];
+    loadSettings(repositoryKey);
+  };
+
+  loadOptionForSelects();
 
   $('#update').click(function () {
     fetchData();
@@ -211,18 +214,6 @@ $(document).ready(function() {
   });
 
   $('#setting-btn').on('click', function () {
-    $('#back-btn').show();
-    $('#setting-btn').hide();
-
-    $('#setting-popup').show();
-    $('#main-popup').hide();
-  });
-
-  $('#back-btn').on('click', function () {
-    $('#back-btn').hide();
-    $('#setting-btn').show();
-
-    $('#setting-popup').hide();
-    $('#main-popup').show();
+    chrome.runtime.openOptionsPage();
   });
 });
