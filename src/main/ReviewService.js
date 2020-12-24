@@ -163,6 +163,11 @@ ReviewService.prototype.reviewDiffs = function (singleFile) {
       }, {})
   };
 
+  function isMatch(line, item) {
+    if (item.regex == 1) return line.match(new RegExp(item.pattern));
+    return line.includes(item.pattern);
+  };
+
   function review(file, additions, isSingleFile) {
     var repositoryKey = window.location.href.split("/")[4];
 
@@ -187,9 +192,7 @@ ReviewService.prototype.reviewDiffs = function (singleFile) {
         };
 
         $.each(PRChecklist, function(i, item) {
-          var pattern = (item.regex == 1) ? (new RegExp(item.pattern)) : item.pattern
-
-          if(line.match(pattern)) {
+          if(isMatch(line, item)) {
             if (item.type == WARNING) {
               report.warningCounts++;
               if(item.note.length) {
