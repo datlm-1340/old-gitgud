@@ -175,6 +175,9 @@ ReviewService.prototype.reviewDiffs = function (singleFile) {
       var warningCounts = 0;
       var dangerCounts = 0;
       var fileType = $(file).data('fileType');
+
+      if (!checklist[repositoryKey]) return;
+
       var checklistData = JSON.parse(checklist[repositoryKey]).checklist;
 
       if (!checklistData) return;
