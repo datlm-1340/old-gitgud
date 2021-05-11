@@ -28,7 +28,7 @@
   "repository": "https://github.com/datlm-1340/gitgud",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "npm-watch": "^0.7.0",
     "rimraf": "^3.0.2"
   }
