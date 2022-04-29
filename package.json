@@ -4,7 +4,7 @@
   "description": "This extension adds hot keys and hierarchical file view to GitHub pull request pages. Also show warnings from a pre-defined checklist",
   "main": "main.js",
   "devDependencies": {
-    "async": "^2.0.0-rc.5",
+    "async": "^2.6.4",
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
     "requirejs": "^2.2.0",
